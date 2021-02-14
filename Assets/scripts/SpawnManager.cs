@@ -10,16 +10,14 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyParent;
     [SerializeField]
+    private GameObject _asteroid;
+    [SerializeField]
     private float _timeToSpawnEnemy = 5.0f;
     [SerializeField]
     private GameObject[] powerUpSpawner; //array (mozemo spremiti vise objekta u njega, u Unityu zadajemo velicinu arraya i dodajemo objekte), numeracija pocije od 0 i ide do N-1
-    [SerializeField]
-    
 
 
-
-
-
+    private GameObject _cloneAsteroid;
     private GameObject _clonePowerUp;
     private GameObject _cloneEnemy;
    // private GameObject _cloneTrippleShotPowerUp;
@@ -34,8 +32,9 @@ public class SpawnManager : MonoBehaviour
     private bool _stopSpawn = false; // varijabla koja odreduje kada trebamo prestat spawnat neprijatelje
     void Start()
     {
-        StartCoroutine(SpawnEnemyRoutine()); // pokretanje Korutine
-        StartCoroutine(SpawnPowerUpRoutine());        
+       // StartCoroutine(SpawnEnemyRoutine()); // pokretanje Korutine
+        StartCoroutine(SpawnPowerUpRoutine());
+        StartCoroutine(SpawnAsteroidRoutine());
         
         
     }
@@ -53,19 +52,20 @@ public class SpawnManager : MonoBehaviour
 
             while (_stopSpawn == false) // ako je while(true) to je neogranicena petlja, ako imamo ovako uvjet, onda ga mozemo mijenjat i zaustaviti petlju, tj. spawnanje objekta
             {
-                int RandomNumbersOfEnemys = Random.Range(0, 3);//vraca broj izmedu 0 i 2
-            for (int i = 0; i <= RandomNumbersOfEnemys; i++) // ako je i=0 spawn 1 Enemy, i=1 spawn 2Enemy, i=2 Spawn 3 Enemy
+                int RandomNumbersOfEnemys = Random.Range(0, 5);//vraca broj izmedu 0 i 10(0,1,2,3,4...6)
+            for (int i = 0; i <= RandomNumbersOfEnemys; i++) // ako je i=0 spawn 1 Enemy, i=1 spawn 2Enemy, i=2 Spawn 3 Enemy, itd itd....
             {
                 
                 Vector3 PosToSpawn = new Vector3(Random.Range(-9.6f, 9.6f), 8, 0); //Random pozicija spawnanja svakog Enemy Clona
                 _cloneEnemy = Instantiate(_enemyPrefab, PosToSpawn, Quaternion.identity); // spawnanje objekta, i spremljeno u varijablu tipa "GAMEOBJECT"
+                yield return new WaitForSeconds(Random.Range(0,2));
                 _cloneEnemy.transform.parent = _enemyParent.transform; //određujemo da ce novo stvoreni klon biti djete unutar _enemyParent(empty), parent je tip "transfrom" zato moramo kada ulazimo unutar parenta koristiti .transform
             }
                  
                 yield return new WaitForSeconds(_timeToSpawnEnemy); // ovo ce cekati 5 sekundi, i onda ce pocet izvrsavat dalje petlju
             }
 
-            Destroy(GameObject.FindWithTag("EnemyContainer")); // uništavanje cijelog parenta 
+            Destroy(GameObject.FindWithTag("EnemyContainer")); // uništavanje cijelog parenta, FINDWITHTAG nalazi prvog objekta u hijerarhiji a ne sve
         
         }
 
@@ -81,6 +81,17 @@ public class SpawnManager : MonoBehaviour
             _clonePowerUp = Instantiate(powerUpSpawner[RandomNumberForList], PosToSpawn, Quaternion.identity); //prvo pricekamo radnom vrijeme i onda pocnemo sa instanciranjem
             //powerUpSpawner[RandomNumberForList] - buduci da smo prefabove spremili unutar Unitya (Trippleshot - 0, Speed -1,shield -2)
             //uzima random broj izmedu 0 i 3, i vraca vrijednost, tj vraca GameObject Prefab koji je postavljen na određenu vrijednost
+        }
+    }
+
+    IEnumerator SpawnAsteroidRoutine()
+    {
+        while(_stopSpawn == false)
+        {
+            float TimeToSpawn = Random.Range(5, 20);
+            Vector3 PosToSpawn = new Vector3(Random.Range(-9.6f, 9.6f), 8, 0);
+            yield return new WaitForSeconds(TimeToSpawn);
+            _cloneAsteroid = Instantiate(_asteroid, PosToSpawn, Quaternion.identity);
         }
     }
 
@@ -102,6 +113,21 @@ public class SpawnManager : MonoBehaviour
         {
             _stopSpawn = true;
         }
+
+   
+
+    public void SpawnEnemyWithAsteroid()
+    {
+
+        Vector3 PosToSpawn = new Vector3(Random.Range(-9.6f, 9.6f), 8, 0);
+        int RandomNumberOfEnemy = Random.Range(0, 5);
+        for (int i = 0; i <= RandomNumberOfEnemy; i++)
+        {
+        _cloneEnemy = Instantiate(_enemyPrefab, PosToSpawn, Quaternion.identity);
+        _cloneEnemy.transform.parent = _enemyParent.transform;
+        }
+        
+    }
 
     }
 

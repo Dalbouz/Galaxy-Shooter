@@ -19,9 +19,14 @@ public class PowerUp : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(Random.Range(-9, 9), 7, transform.position.z);
+        
+
     }
 
-    
+   
+   /// <summary>
+   /// Update metoda !!
+   /// </summary>
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);

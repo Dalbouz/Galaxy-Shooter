@@ -6,14 +6,14 @@ public class player : MonoBehaviour
 {
     //stavljnje SerializeField iznad definiranje privatne varijable, mozemo interaktirati u Unityu iako je varijabla privatna
     [SerializeField]
-    private float _startSpeed = 4.5f;//pocetna brzina
-    private float _staticSpeed = 4.5f;//brzina koja se nikada nece promjenit
+    private float _startSpeed = 5.5f;//pocetna brzina
+    private float _staticSpeed = 5.5f;//brzina koja se nikada nece promjenit
     private float _powerUpSpeed = 8f;//powerUP speed
-    private bool _isSpeedPowerUpCooldown = true;
-
+   // private bool _isSpeedPowerUpCooldown = true;
     private float _horizontal;
     private float _vertical;
 
+    private int _currentScore;
     
 
     [SerializeField]
@@ -23,8 +23,6 @@ public class player : MonoBehaviour
     [SerializeField]
     private GameObject _shieldVisualizer;
 
-    
-    
     
 
     private float _offsetPrefabLaserY = 0.8f;
@@ -38,6 +36,8 @@ public class player : MonoBehaviour
     private int _life = 3;
 
     private SpawnManager _spawnManager; //napravimo varijablu koja je tip "SpawnManager" tj. ona je tip skripte s kojom zelimo komunicirat, na ovaj nacin cemo dohvacat stvari iz SpawnManager skripte
+    private UIManager _uiManager;
+    private GameManager _gameManager;
   
 
     
@@ -56,11 +56,14 @@ public class player : MonoBehaviour
 
         //tu u Startu odmah na pocetku spremamo komponentu "skriptu" od SpawnManagera u Varijablu i odmah sa Null provjeravamo da li ona postoji, tj. da li je uspjesno dohvacena ako nije javit ce nam da nepostoji tj. jednako null
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();// preko GameObject.Find("upisemo tocno kako se zove obj na kojem je ta skripta"), i sa get component dohvatiumo tu skirptu
-        if (_spawnManager == null)
-            Debug.LogError("Spawn Manager je jedna Null.");
-
-        
-
+        if (_spawnManager == null) //provjeravamo odmah na pocetku da li smo uspjeli dohvatiti skriptu
+            Debug.LogError("Spawn Manager je jednak NULL.");
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uiManager == null)
+            Debug.LogError("UIManager je jednak NULL.");
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        if (_gameManager == null)
+            Debug.Log("GameManager je jednak NULL");
     }
 
 
@@ -158,11 +161,17 @@ public class player : MonoBehaviour
             return; // return nas izbacuje odmah iz metoda DAMAGE, i nece izvršiti ništa što je napisano ispod return naredbe
         } 
         _life -= 1;
+
+        _uiManager.DisplayLives(_life); //pokretanje metode DisplayLives unutar UIManagera, prima vrijednost od _life
         
         if (_life == 0)//provjerit da li smo mrtvi
         {
             _spawnManager.OnPlayerDeath(); // ovdje smo pozvali metodu koja se nalazi unutar SpawnManager skripte
             Destroy(this.gameObject);
+            _uiManager.DisplayGameOverAndRestartLevelText();
+            _gameManager.GameOver();
+            
+            
         }
     }
 
@@ -199,9 +208,6 @@ public class player : MonoBehaviour
         StartCoroutine(SpeedPowerUp());
     }
 
-    
-
-  
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -210,5 +216,12 @@ public class player : MonoBehaviour
             this.gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
         }
     }
+    
+    public void AddScore(int points) // ova metoda prima 1 parametar tipa int koji se zove points(taj points nemoramo nigdje predefinirat jer ga definiramo sada tu) tu vrijednost prima iz EnemyScripte
+    {
+        _currentScore += points;
+        _uiManager.UpdateScore(_currentScore);
+    }
+
 
 }

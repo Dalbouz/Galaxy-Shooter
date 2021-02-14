@@ -11,11 +11,18 @@ public class Enemy : MonoBehaviour
     private float _xPosition;
 
     private bool _destroyOnPlayerDeath = false;
+
+    private player _player;
+    private Animator _animator; // Kreiranje kontrolera za Animator komponentu
     
     void Start()
     {
-
-       
+        _player = GameObject.Find("Player").GetComponent<player>(); // puno bolje je ovako trazit komponentu u void Start, jer nam se sada ta komponenta spremila i mozemo ju koristiti dalje u programu
+        if (_player == null)
+            Debug.LogError("Player je jednak null.");
+        _animator = gameObject.GetComponent<Animator>();// dohvacanje animator komponente 
+        if (_animator == null)
+            Debug.LogError("Animator je jednak null.");
     }
 
     // Update is called once per frame
@@ -34,7 +41,6 @@ public class Enemy : MonoBehaviour
         if (other.tag == "Player")
         {
 
-            Destroy(GameObject.FindWithTag("Enemy"));
 
             /*pozivamo damage metodu iz skripte player-->
              * other=sadrzi podatke o objektu s kojim se dogodila kolizija
@@ -43,23 +49,33 @@ public class Enemy : MonoBehaviour
              * da nismo koristili null referencu(provjeravali da li postoji ta komponenta), mogli smo npr. dohvatit Damage metodu ovako
              * other.transform.GetComponent<player>().Damage();
              */
-            player DamageScript = other.transform.GetComponent<player>();
+            
             //provjeravamo da li ova skripta postoji na našem "other" objektu, ako da izvrši je 
-            if (DamageScript != null)
-                DamageScript.Damage();
+            if (_player != null)
+                _player.Damage();
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            _animator.SetTrigger("IsDestroy");
+            _speed = 0;
+            Destroy(this.gameObject,4.8f);
         }
 
 
         // ako je tag od other jednak Laseru, unistavamo prvo laser a onda Enemy
         if (other.tag == "Laser")
         {
+            
             // Mozemo i ovako preko FindWithTag
             //Destroy(GameObject.FindWithTag("Laser"));
             // Destroy(GameObject.FindWithTag("Enemy"));
 
             //ili ovako, other oznacava game objekt s kojim smo dosli u koliziju, a this oznacava gameobjekt na kojeg je stavljena ova skripta
             Destroy(other.gameObject);
-            Destroy(this.gameObject);
+            _speed = 0;
+            _animator.SetTrigger("IsDestroy");
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            Destroy(this.gameObject, 2f);// ovih 4.8f je wait time, prvo cekamo određeno vrijeme i onda unistimo objekt
+            if(_player!=null)
+                _player.AddScore(Random.Range(5,50)); // tu pozivamo Addscore metodu i vraca vrijednost random izeđu 5 i 50, i spremat ce se kao varijabla points unutar Player scripte
         }
     }
 
@@ -68,6 +84,7 @@ public class Enemy : MonoBehaviour
         // ako objekt dojde do kraja ekrana isti taj objekt ce se spawnat na vrh ekrana, i ako dojde do kraja ekrana spawnat ce se negdje na radnom po X osi 
         if (transform.position.y <= -4.5f && _destroyOnPlayerDeath == false)
         {
+            _player.AddScore(-10);
             _xPosition = Random.Range(-9.6f, 9.6f);
             transform.position = new Vector3(_xPosition, _yPosition, 0);
         }
