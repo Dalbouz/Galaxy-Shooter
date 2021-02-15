@@ -32,9 +32,7 @@ public class SpawnManager : MonoBehaviour
     private bool _stopSpawn = false; // varijabla koja odreduje kada trebamo prestat spawnat neprijatelje
     void Start()
     {
-       // StartCoroutine(SpawnEnemyRoutine()); // pokretanje Korutine
-        StartCoroutine(SpawnPowerUpRoutine());
-        StartCoroutine(SpawnAsteroidRoutine());
+        
         
         
     }
@@ -43,6 +41,14 @@ public class SpawnManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void StartAllCoroutines()
+    {
+        StartCoroutine(SpawnEnemyRoutine()); // pokretanje Korutine
+        StartCoroutine(SpawnPowerUpRoutine());
+        StartCoroutine(SpawnAsteroidRoutine());
+
     }
 
     //IEnumerator se koristi kada radimo nekakvim loop-ama, i on nam dopusta da koristimo funkciju Yield(yield funkcija nam omogucava da zamrznemo kod na neko vrijeme i onda ga ponovno poceno pokretat nakon isteka vremena)

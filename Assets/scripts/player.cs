@@ -9,6 +9,8 @@ public class player : MonoBehaviour
     private float _startSpeed = 5.5f;//pocetna brzina
     private float _staticSpeed = 5.5f;//brzina koja se nikada nece promjenit
     private float _powerUpSpeed = 8f;//powerUP speed
+    private Vector3 _newSpeedUpScale= new Vector3(0.3f,0,0);
+
    // private bool _isSpeedPowerUpCooldown = true;
     private float _horizontal;
     private float _vertical;
@@ -22,6 +24,12 @@ public class player : MonoBehaviour
     private GameObject _trippleShotPrefab;
     [SerializeField]
     private GameObject _shieldVisualizer;
+    [SerializeField]
+    private GameObject _thruster;
+    [SerializeField]
+    private GameObject _rightEngine;
+    [SerializeField]
+    private GameObject _leftEngine;
 
     
 
@@ -51,6 +59,8 @@ public class player : MonoBehaviour
     
     void Start()
     {
+       
+
         //take the current position = new position(0, 0, 0)
         transform.position = new Vector3(0, 0, 0);
 
@@ -162,6 +172,11 @@ public class player : MonoBehaviour
         } 
         _life -= 1;
 
+        if (_life == 2)
+            _rightEngine.SetActive(true);
+        else if (_life == 1)
+            _leftEngine.SetActive(true);
+
         _uiManager.DisplayLives(_life); //pokretanje metode DisplayLives unutar UIManagera, prima vrijednost od _life
         
         if (_life == 0)//provjerit da li smo mrtvi
@@ -191,14 +206,15 @@ public class player : MonoBehaviour
   
             
     
-    IEnumerator SpeedPowerUp() //promjenimo speed cekamo 5 sekundi i onda napravimo break iz while petlje, i vratimo speed na pocetni speed
+    IEnumerator SpeedPowerUp() //promjenimo speed cekamo 5 sekundi  i vratimo speed na pocetni speed
     {
         
         _startSpeed = _powerUpSpeed;
-        
+        _thruster.transform.localScale += _newSpeedUpScale;
             
         
         yield return new WaitForSeconds(5);
+        _thruster.transform.localScale -= _newSpeedUpScale;
         _startSpeed = _staticSpeed;
        
     }
@@ -209,13 +225,13 @@ public class player : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter2D(Collider2D other)
+   /* private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "SpeedPowerUp")
         {
             this.gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
         }
-    }
+    }*/
     
     public void AddScore(int points) // ova metoda prima 1 parametar tipa int koji se zove points(taj points nemoramo nigdje predefinirat jer ga definiramo sada tu) tu vrijednost prima iz EnemyScripte
     {
