@@ -15,6 +15,7 @@ public class BossEnemySpawner : MonoBehaviour
    
     void Start()
     {
+        //FEEDBACK: izbjegavati koristenje Find metoda, koristiti reference ili singleton
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         if (_spawnManager == null)
             Debug.LogError("_spawnManager je jednak NULL.");
@@ -39,7 +40,7 @@ public class BossEnemySpawner : MonoBehaviour
 
     private void MovementEnd()
     {
-        
+        //FEEDBACK: izbjegavati magic numbers, 2 i 11 u ovom slucaju
         transform.position += Vector3.up * _speed * 2* Time.deltaTime;
         if (transform.position.y >= 11)
             Destroy(this.gameObject);

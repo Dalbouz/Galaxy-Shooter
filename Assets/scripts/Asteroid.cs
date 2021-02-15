@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//FEEDBACK: i enemy i asteroid imaju odredenu logiku kretnje prema dolje, to bi bilo korisno odvojiti u zasebnu
+//          komponentu (skriptu) koja je samo zasluzna za kretnju objekta prema dolje (da logika kretnje bude
+//          na jednom mjestu)
 public class Asteroid : MonoBehaviour
 {
     [SerializeField]

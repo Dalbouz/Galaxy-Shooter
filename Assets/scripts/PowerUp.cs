@@ -6,6 +6,7 @@ public class PowerUp : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 1.5f;
+    //FEEDBACK: ukoliko je potreban tip varijable koji omogucuje vise stanja koristiti enumerator
     [SerializeField] //Trippleshot = 0, Speed = 1, Shield = 2
     private int _powerUpID; //ID broj (0,1,2...) koji smo dodjelili objektu direktno u Unityu, na trippleshot smo stavili 0, a na speed 1
     [SerializeField]

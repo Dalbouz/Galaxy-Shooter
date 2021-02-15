@@ -13,6 +13,7 @@ public class Shield : MonoBehaviour
     private float _startSpeed = 4.5f;
     private float _staticSpeed = 4.5f;
     private float _newSpeedPowerUpSpeed = 8f;
+    //FEEDBACK: brisati metode koje se ne koriste ili su prazne
     // Start is called before the first frame update
     void Start()
     {

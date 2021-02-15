@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//FEEDBACK: pripaziti na nazive skripti i klasa, obicno je uvijek prvo slovo veliko
 public class player : MonoBehaviour
 {
     //stavljnje SerializeField iznad definiranje privatne varijable, mozemo interaktirati u Unityu iako je varijabla privatna
@@ -15,6 +16,8 @@ public class player : MonoBehaviour
     private float _horizontal;
     private float _vertical;
 
+    //FEEDBACK: ukoliko igra ostavlja mogucnost za same screen multiplayer tada score vezati uz igraca
+    //          u suprotnom tu logiku drzati van logike igraca
     private int _currentScore;
     
 
