@@ -12,6 +12,7 @@ public class Asteroid : MonoBehaviour
     private Animator _animator;
     private player _player;
     private SpawnManager _spawnManager;
+    private AudioSource _audioSource;
 
     private int _positiveOrNegativeRotation;
     // Start is called before the first frame update
@@ -27,6 +28,7 @@ public class Asteroid : MonoBehaviour
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         if (_spawnManager == null)
             Debug.Log("_spawnManager je jednak NULL.");
+        _audioSource = gameObject.GetComponent<AudioSource>();
 
         _positiveOrNegativeRotation = Random.Range(0, 2);
         if (_positiveOrNegativeRotation == 0)
@@ -52,6 +54,8 @@ public class Asteroid : MonoBehaviour
             _animator.SetTrigger("IsDestroy");
             _speed = 0; 
             Destroy(other.gameObject);
+            _audioSource.Play();
+            Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject,2.0f);
             _spawnManager.SpawnEnemyWithAsteroid();
             
@@ -61,6 +65,7 @@ public class Asteroid : MonoBehaviour
         {
             _animator.SetTrigger("IsDestroy");
             _speed = 0;
+            _audioSource.Play();
             _player.Damage();
             Destroy(this.gameObject,2.0f);
         }

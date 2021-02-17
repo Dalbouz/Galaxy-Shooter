@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
 
     private player _player;
     private Animator _animator; // Kreiranje kontrolera za Animator komponentu
+    private AudioSource _audioSource;
+    
     
     void Start()
     {
@@ -23,6 +25,9 @@ public class Enemy : MonoBehaviour
         _animator = gameObject.GetComponent<Animator>();// dohvacanje animator komponente 
         if (_animator == null)
             Debug.LogError("Animator je jednak null.");
+        _audioSource = gameObject.GetComponent<AudioSource>();
+        if (_audioSource == null)
+            Debug.LogError("Audio Source je jednak null.");
     }
 
     // Update is called once per frame
@@ -55,6 +60,7 @@ public class Enemy : MonoBehaviour
                 _player.Damage();
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             _animator.SetTrigger("IsDestroy");
+            _audioSource.Play();
             _speed = 0;
             Destroy(this.gameObject,4.8f);
         }
@@ -73,10 +79,12 @@ public class Enemy : MonoBehaviour
             _speed = 0;
             _animator.SetTrigger("IsDestroy");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            _audioSource.Play();
             Destroy(this.gameObject, 2f);// ovih 4.8f je wait time, prvo cekamo određeno vrijeme i onda unistimo objekt
             if(_player!=null)
                 _player.AddScore(Random.Range(5,50)); // tu pozivamo Addscore metodu i vraca vrijednost random izeđu 5 i 50, i spremat ce se kao varijabla points unutar Player scripte
         }
+        
     }
 
     private void RespawnWhenOnEnd() 

@@ -51,6 +51,7 @@ public class BossEnemySpawner : MonoBehaviour
         {
             _numberOfHits += 1;
             Destroy(other.gameObject);
+   
             if (_numberOfHits == _numberOfHitsToDestroy)
                 _spawnManager.StartAllCoroutines();
            

@@ -30,15 +30,23 @@ public class player : MonoBehaviour
     private GameObject _rightEngine;
     [SerializeField]
     private GameObject _leftEngine;
+    [SerializeField]
+    private AudioClip _laserShootSound; // u unityu drag&dropamo naš Clip
+   
+    
+    private AudioSource _audioSource; //varijabla za dohvacanje Audio Source komponente na Playeru
+   
 
     
 
     private float _offsetPrefabLaserY = 0.8f;
     private float _offsetPrefabLaserX = 0.79f;
 
+    //ovo koristimo kada pucamo na ONBUTTOW DOWN
     [SerializeField]
-    private float _fireRate = 0.5f;
+    private float _fireRate = 0.2f;
     private float _canFire = -1f;
+   
 
     [SerializeField]
     private int _life = 3;
@@ -51,7 +59,7 @@ public class player : MonoBehaviour
     
     private bool _isTrippleShotActive = false;
     [SerializeField]
-    private float _startNumberOfTrippleShots = 5;
+    private float _startNumberOfTrippleShots = 15;
     
     public bool IsShieldActive = false;
    // private float _currentNumberOfTrippleShots;
@@ -59,7 +67,7 @@ public class player : MonoBehaviour
     
     void Start()
     {
-       
+
 
         //take the current position = new position(0, 0, 0)
         transform.position = new Vector3(0, 0, 0);
@@ -73,7 +81,13 @@ public class player : MonoBehaviour
             Debug.LogError("UIManager je jednak NULL.");
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         if (_gameManager == null)
-            Debug.Log("GameManager je jednak NULL");
+            Debug.LogError("GameManager je jednak NULL");
+        _audioSource = GetComponent<AudioSource>(); //dohvatimo audiosource komponentu
+        if (_audioSource == null)
+            Debug.LogError("Audio Source on the player is NULL");
+        else
+            _audioSource.clip = _laserShootSound; // prije ovoga je slot u komponenti AUDIO SOURCE na playeru prazan, sa ovime dodjeljujemo audio clip
+       // StartCoroutine(FireLaserAuto());
     }
 
 
@@ -85,9 +99,9 @@ public class player : MonoBehaviour
         //npr: Time.time=5, da li je veci od -1, je, izvršava se
         //npr: DRUGI KRUG - Time.time= 5, da li je to vece od 5.5, nije, nece se izvrsiti, cekamo 0,5 sekundi, kako bi Time.time bio 5.6, onda ce biti veći od CanFire(5.5)
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
-        {
-            FireLaser();
-        }
+         {
+          FireLaserOnButtonDown();
+         }
 
         
     }
@@ -117,8 +131,8 @@ public class player : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, 5, 0);
         }
-        else if (transform.position.y <= -3.8f)
-            transform.position = new Vector3(transform.position.x, -3.8f, 0);
+        else if (transform.position.y <= -3f)
+            transform.position = new Vector3(transform.position.x, -3f, 0);
       
 
         // ili mozemo to napraviti preko Mathf.Clamp naredbe = Mathf.Clamp(OS, Min, Max)
@@ -137,8 +151,29 @@ public class player : MonoBehaviour
 
     }
 
+    /*IEnumerator FireLaserAuto()
+    {
+        while (true)
+        {
 
-   void FireLaser()
+        if (_isTrippleShotActive == true && _startNumberOfTrippleShots >= 1) //ako je varijabla _isTrippleShotActive jednaka true i broj ispaljenih tripplehotova je veci od 0
+        {
+            Instantiate(_trippleShotPrefab, new Vector3(transform.position.x - _offsetPrefabLaserX, transform.position.y, transform.position.z), Quaternion.identity); //ispaljujemo trippleshot
+            _startNumberOfTrippleShots--;
+            if (_startNumberOfTrippleShots == 0) //ako je broj trippleshotova jedna nula, resetamo broj trippleshotova na pocetnu vrijednost, ali prebacujemo _isTrippleshotActive u False, tako da moramo ponovno pokupiti powerup
+            {
+                _startNumberOfTrippleShots = 15f;
+                _isTrippleShotActive = false;
+            }
+        }
+        else
+            Instantiate(_laserprefab, new Vector3(transform.position.x, transform.position.y + _offsetPrefabLaserY, transform.position.z), Quaternion.identity);
+        _audioSource.Play(); // pokretanje CLIPA koji je na audioSource komponenti
+            yield return new WaitForSeconds(0.4f);
+        }
+    }*/
+   
+     void FireLaserOnButtonDown()
     {
         
             //povecavamo CanFire = vremenu trajanja igre + FireRate(0,5)
@@ -158,8 +193,11 @@ public class player : MonoBehaviour
 
         }
         else
-            Instantiate(_laserprefab, new Vector3(transform.position.x, transform.position.y + _offsetPrefabLaserY, transform.position.z), Quaternion.identity);  
+            Instantiate(_laserprefab, new Vector3(transform.position.x, transform.position.y + _offsetPrefabLaserY, transform.position.z), Quaternion.identity);
+        _audioSource.Play();    
     }
+
+    
    
 
     public void Damage()

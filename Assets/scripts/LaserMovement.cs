@@ -8,13 +8,16 @@ public class LaserMovement : MonoBehaviour
     [SerializeField]
     private float _speed = 8.0f;
 
-    [SerializeField]
-    private GameObject _laserPrefab;
+  
+
+    private Animator _animator;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        _animator = gameObject.GetComponent<Animator>();
+        if (_animator == null)
+            Debug.LogError("Animator Component jednak NULL");
     }
 
     // Update is called once per frame
@@ -31,7 +34,15 @@ public class LaserMovement : MonoBehaviour
             {
                 Destroy(transform.parent.gameObject); // unistavamo roditelj tripple shot prefab
             }
-                Destroy(_laserPrefab); // a ako nije unistavamo samo instancirani laser prefab
+                Destroy(this.gameObject); // a ako nije unistavamo samo instancirani laser prefab
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "Boss")
+        {
+            _animator.SetTrigger("IsHit");
         }
     }
 }

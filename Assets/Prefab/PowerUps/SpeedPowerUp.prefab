@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _powerUpID: 1
+  _clipSound: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   SpeedUpSpawns: []
 --- !u!212 &5211112686759876077
 SpriteRenderer:

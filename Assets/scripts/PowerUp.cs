@@ -9,7 +9,7 @@ public class PowerUp : MonoBehaviour
     [SerializeField] //Trippleshot = 0, Speed = 1, Shield = 2
     private int _powerUpID; //ID broj (0,1,2...) koji smo dodjelili objektu direktno u Unityu, na trippleshot smo stavili 0, a na speed 1
     [SerializeField]
-    
+    private AudioClip _clipSound;
 
     public GameObject[] SpeedUpSpawns;
 
@@ -19,7 +19,7 @@ public class PowerUp : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(Random.Range(-9, 9), 7, transform.position.z);
-        
+       
 
     }
 
@@ -40,6 +40,7 @@ public class PowerUp : MonoBehaviour
             Destroy(this.gameObject);
             player player = other.transform.GetComponent<player>(); //dohvacanje skripte player koja se nalazi na PLAYERU (this object)
             
+            AudioSource.PlayClipAtPoint(_clipSound, transform.position,2.0f); // Funkcionira slicno kao instantiate naredba, nije mu potrebna AudioSource Kompomenta, na ovaj nacin instancira određeni zvuk (clip), na određenoj poziciji
            
             if(player != null)
             {
@@ -47,12 +48,17 @@ public class PowerUp : MonoBehaviour
                 {
                     case 0: //u slucaju da je PowerUPID jednak 0
                         player.TrippleShotActive();// izvršava se aktivacija TrippleshotPowerUp
+                        
                         break;//ovo moramo imat, govori programu da kada je izvršena naredba iznad, da nas izbaci iz petlje, kako ju nebi slucajno poceo ponavljat
                     case 1:
                         player.StartPowerUpSpeed();
-                            break;
+                        
+
+                        break;
                     case 2:
                         player.ShieldActive();
+                        
+
                         break;
                     default: //ukoliko niti jedan od gore navedenih slucajeva nije istinit ili ispunjen, po defaultu izbaci nas iz switch petlje
                         break;
