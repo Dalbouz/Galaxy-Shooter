@@ -10,7 +10,9 @@ public class BossEnemySpawner : MonoBehaviour
     private float _numberOfHits = 0;
     private Vector3 _endPosition = new Vector3(0, 4.7f, 0);
     private SpawnManager _spawnManager;
-   
+    private UIManager _uiManager;
+    [SerializeField]
+    private GameObject _storyText;
     
    
     void Start()
@@ -18,6 +20,10 @@ public class BossEnemySpawner : MonoBehaviour
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         if (_spawnManager == null)
             Debug.LogError("_spawnManager je jednak NULL.");
+        transform.GetComponent<EdgeCollider2D>().enabled = false;
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uiManager == null)
+            Debug.LogError("UIManager je jednak null");
     }
 
     // Update is called once per frame
@@ -32,6 +38,8 @@ public class BossEnemySpawner : MonoBehaviour
         
         if(_numberOfHits >=_numberOfHitsToDestroy) 
             MovementEnd();
+
+
     }
    
 
@@ -49,12 +57,23 @@ public class BossEnemySpawner : MonoBehaviour
     {
         if(other.tag == "Laser")
         {
+            other.gameObject.GetComponent<AudioSource>().Play();
+            other.gameObject.GetComponent<Animator>().SetTrigger("IsHit");
             _numberOfHits += 1;
-            Destroy(other.gameObject);
+            Destroy(other.gameObject,2.0f);
    
             if (_numberOfHits == _numberOfHitsToDestroy)
+            {
                 _spawnManager.StartAllCoroutines();
+            }
            
         }
+    }
+
+    public void EnableCollider()
+    {
+        transform.GetComponent<EdgeCollider2D>().enabled = true;
+        
+        Destroy(_storyText);
     }
 }

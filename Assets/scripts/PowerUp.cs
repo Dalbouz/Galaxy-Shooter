@@ -11,15 +11,21 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private AudioClip _clipSound;
 
+    private UIManager _uiManager;
+
     public GameObject[] SpeedUpSpawns;
 
+    
 
+    
 
     
     void Start()
     {
+
         transform.position = new Vector3(Random.Range(-9, 9), 7, transform.position.z);
-       
+      
+            
 
     }
 
@@ -39,6 +45,7 @@ public class PowerUp : MonoBehaviour
         {
             Destroy(this.gameObject);
             player player = other.transform.GetComponent<player>(); //dohvacanje skripte player koja se nalazi na PLAYERU (this object)
+            _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
             
             AudioSource.PlayClipAtPoint(_clipSound, transform.position,2.0f); // Funkcionira slicno kao instantiate naredba, nije mu potrebna AudioSource Kompomenta, na ovaj nacin instancira određeni zvuk (clip), na određenoj poziciji
            
@@ -48,17 +55,26 @@ public class PowerUp : MonoBehaviour
                 {
                     case 0: //u slucaju da je PowerUPID jednak 0
                         player.TrippleShotActive();// izvršava se aktivacija TrippleshotPowerUp
-                        
+                        _uiManager.DisplayPowerUps(_powerUpID);
                         break;//ovo moramo imat, govori programu da kada je izvršena naredba iznad, da nas izbaci iz petlje, kako ju nebi slucajno poceo ponavljat
                     case 1:
                         player.StartPowerUpSpeed();
-                        
-
+                        _uiManager.DisplayPowerUps(_powerUpID);
                         break;
                     case 2:
                         player.ShieldActive();
+                        _uiManager.DisplayPowerUps(_powerUpID);
+                        break;
+                    case 3:
+                        player.StartSpeedShotRoutine();
+                        _uiManager.DisplayPowerUps(_powerUpID);
+                        break;
+                    case 4:
+                        player.RepairEngine();
+                        break;
+                    case 5:
+                        player.HealUp();
                         
-
                         break;
                     default: //ukoliko niti jedan od gore navedenih slucajeva nije istinit ili ispunjen, po defaultu izbaci nas iz switch petlje
                         break;

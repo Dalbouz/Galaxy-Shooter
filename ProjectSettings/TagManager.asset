@@ -12,6 +12,9 @@ TagManager:
   - Shield
   - SpawnManager
   - Boss
+  - Asteroid
+  - StoryTextStart
+  - Boss1
   layers:
   - Default
   - TransparentFX

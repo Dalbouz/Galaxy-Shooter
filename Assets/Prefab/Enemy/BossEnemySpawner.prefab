@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4472399941747975429}
   - component: {fileID: 2015072313528026580}
-  - component: {fileID: 8355879400074636029}
   - component: {fileID: 3415295619774779352}
   - component: {fileID: 957140789}
+  - component: {fileID: 3034967799412759877}
   m_Layer: 0
   m_Name: BossEnemySpawner
   m_TagString: Untagged
@@ -84,32 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &8355879400074636029
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9187108267196583659}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.024719954, y: 0.587106}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 5.12}
-    newSize: {x: 5.12, y: 5.12}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.1400385, y: 2.338972}
-  m_EdgeRadius: 0
 --- !u!50 &3415295619774779352
 Rigidbody2D:
   serializedVersion: 4
@@ -144,3 +118,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 2
+--- !u!68 &3034967799412759877
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9187108267196583659}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: 0.44686908, y: 1.2355814}
+  - {x: 1.0540941, y: 0.3436106}
+  - {x: 1.096114, y: 0.009380996}
+  - {x: 0.84445846, y: 0.2750403}
+  - {x: 0.5032493, y: 0.10347354}
+  - {x: 0.33277875, y: 0.013035655}
+  - {x: 0.3004967, y: -1.3473483}
+  - {x: 0.14642525, y: -1.3468695}
+  - {x: 0.15407707, y: -0.5745554}
+  - {x: -0.16696678, y: -0.5706347}
+  - {x: -0.18029767, y: -1.3777746}
+  - {x: -0.3122669, y: -1.3879946}
+  - {x: -0.32834646, y: 0.011697531}
+  - {x: -0.75612605, y: 0.23014742}
+  - {x: -1.0031667, y: -0.06647216}
+  - {x: -1.1358982, y: 0.32553944}
+  - {x: -0.3898093, y: 1.3884408}
+  - {x: -0.23297122, y: 1.0864651}
+  - {x: 0.4560682, y: 1.2186667}

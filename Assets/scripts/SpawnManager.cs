@@ -8,18 +8,27 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
+    private GameObject _laserCannonPrefab;
+    [SerializeField]
     private GameObject _enemyParent;
     [SerializeField]
     private GameObject _asteroid;
     [SerializeField]
+    private GameObject _boss1;
+    [SerializeField]
     private float _timeToSpawnEnemy = 5.0f;
     [SerializeField]
     private GameObject[] powerUpSpawner; //array (mozemo spremiti vise objekta u njega, u Unityu zadajemo velicinu arraya i dodajemo objekte), numeracija pocije od 0 i ide do N-1
-
+    [SerializeField]
+    private GameObject _repairPrefab;
 
     private GameObject _cloneAsteroid;
     private GameObject _clonePowerUp;
     private GameObject _cloneEnemy;
+    private GameObject _cloneRepair;
+
+    private player _player;
+   
    // private GameObject _cloneTrippleShotPowerUp;
   //  private GameObject _cloneSpeedPowerUp;
 
@@ -27,22 +36,20 @@ public class SpawnManager : MonoBehaviour
 
     
 
-    
+    void start()
+    {
+        _player = GameObject.Find("Player").GetComponent<player>();
+        if (_player == null)
+            Debug.LogError("Player je jednak Null.");
+       
+    }
 
     private bool _stopSpawn = false; // varijabla koja odreduje kada trebamo prestat spawnat neprijatelje
-    void Start()
-    {
-        
-        
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private bool _IsEngineDown = false;
 
+
+   
     public void StartAllCoroutines()
     {
         StartCoroutine(SpawnEnemyRoutine()); // pokretanje Korutine
@@ -82,14 +89,41 @@ public class SpawnManager : MonoBehaviour
         {
             float TimeToSpawn = Random.Range(5, 20); //random vrijeme za spawnanje
             Vector3 PosToSpawn = new Vector3(Random.Range(-9.6f, 9.6f), 8, 0);
-            int RandomNumberForList = Random.Range(0, 3);
+            int RandomNumberForList = Random.Range(0, 5);
             yield return new WaitForSeconds(TimeToSpawn);
             _clonePowerUp = Instantiate(powerUpSpawner[RandomNumberForList], PosToSpawn, Quaternion.identity); //prvo pricekamo radnom vrijeme i onda pocnemo sa instanciranjem
             //powerUpSpawner[RandomNumberForList] - buduci da smo prefabove spremili unutar Unitya (Trippleshot - 0, Speed -1,shield -2)
             //uzima random broj izmedu 0 i 3, i vraca vrijednost, tj vraca GameObject Prefab koji je postavljen na određenu vrijednost
+
         }
     }
 
+    // SPAWN REPAIR KADA BUDE ENGINE DAMANGED
+   IEnumerator SpawnRepairRoutine()
+    {
+        while(_IsEngineDown == true)
+        {
+
+        float TimeToSpawn = Random.Range(5, 15);
+        Vector3 PosToSpawn = new Vector3(Random.Range(-9.6f, 9.6f), 8, 0);
+        yield return new WaitForSeconds(TimeToSpawn);
+        _cloneRepair = Instantiate(_repairPrefab, PosToSpawn, Quaternion.identity);
+        }
+    }
+
+    public void SpawnRepair()
+    {
+        _IsEngineDown = true;
+        StartCoroutine(SpawnRepairRoutine());
+    }
+
+    public void EngineRepairedStopSpawning()
+    {
+        _IsEngineDown = false;
+    }
+
+    
+    
     IEnumerator SpawnAsteroidRoutine()
     {
         while(_stopSpawn == false)
@@ -122,17 +156,40 @@ public class SpawnManager : MonoBehaviour
 
    
 
-    public void SpawnEnemyWithAsteroid()
+    public void SpawnEnemyWithAsteroid(int Rand)
     {
 
-        Vector3 PosToSpawn = new Vector3(Random.Range(-9.6f, 9.6f), 8, 0);
-        int RandomNumberOfEnemy = Random.Range(0, 5);
+        if(Rand == 0) //Spawnanje Enemya
+        {
+            
+        int RandomNumberOfEnemy = Random.Range(0, 8);
         for (int i = 0; i <= RandomNumberOfEnemy; i++)
         {
-        _cloneEnemy = Instantiate(_enemyPrefab, PosToSpawn, Quaternion.identity);
+        Vector3 PosToSpawnEnemy = new Vector3(Random.Range(-9.6f, 9.6f), 8, 0);
+        _cloneEnemy = Instantiate(_enemyPrefab, PosToSpawnEnemy, Quaternion.identity);
         _cloneEnemy.transform.parent = _enemyParent.transform;
         }
         
+        }
+        else if(Rand == 1) // spawnanje cannon lasera
+        {
+            
+            Vector3 PosToSpawnLaserCannon = new Vector3(0, 1.7f, 0);
+            Instantiate(_laserCannonPrefab, PosToSpawnLaserCannon, Quaternion.identity);
+        }
+        else if (Rand == 2) // spawnanje PowerUpa
+        {
+            
+            Vector3 PosToSpawn = new Vector3(Random.Range(-9.6f, 9.6f), 8, 0);
+            int RandomNumberFromList = Random.Range(0, 5);
+            _clonePowerUp = Instantiate(powerUpSpawner[RandomNumberFromList], PosToSpawn, Quaternion.identity);
+        }
+    }
+
+    public void SpawnBoss1()
+    {
+        Vector3 PosToSpawn = new Vector3(0, 14f, 0);
+        _boss1 = Instantiate(_boss1, PosToSpawn, Quaternion.identity);
     }
 
     }

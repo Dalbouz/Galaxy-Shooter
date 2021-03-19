@@ -8,17 +8,27 @@ public class Asteroid : MonoBehaviour
     private float _rotationSpeed;
     [SerializeField]
     private float _speed = 2.0f;
+    [SerializeField]
+    private float _health = 3;
 
     private Animator _animator;
     private player _player;
     private SpawnManager _spawnManager;
     private AudioSource _audioSource;
+    private LaserMovement _laserMovement;
+
+    private UIManager _uiManager;
+
+    private int _announcementUI;
+
 
     private int _positiveOrNegativeRotation;
     // Start is called before the first frame update
     void Start()
-    { 
-
+    {
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uiManager == null)
+            Debug.LogError("UiManager je jednak Null");
         _animator = gameObject.GetComponent<Animator>();
         if (_animator == null)
             Debug.LogError("Animator je jednak NULL.");
@@ -29,6 +39,8 @@ public class Asteroid : MonoBehaviour
         if (_spawnManager == null)
             Debug.Log("_spawnManager je jednak NULL.");
         _audioSource = gameObject.GetComponent<AudioSource>();
+        
+        
 
         _positiveOrNegativeRotation = Random.Range(0, 2);
         if (_positiveOrNegativeRotation == 0)
@@ -45,20 +57,28 @@ public class Asteroid : MonoBehaviour
 
         if (transform.position.y <= -6f)
             Destroy(this.gameObject);
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Laser")
         {
-            _animator.SetTrigger("IsDestroy");
-            _speed = 0; 
-            Destroy(other.gameObject);
-            _audioSource.Play();
-            Destroy(GetComponent<Collider2D>());
-            Destroy(this.gameObject,2.0f);
-            _spawnManager.SpawnEnemyWithAsteroid();
+            other.gameObject.GetComponent<Animator>().SetTrigger("IsHit");
+            Destroy(other.gameObject, 2.0f);
+            _health -= 1;
             
+            if (_health <= 0)
+            {
+                _animator.SetTrigger("IsDestroy");
+                _speed = 0;
+                _audioSource.Play();
+                Destroy(GetComponent<Collider2D>());
+                Destroy(this.gameObject, 2.0f);
+                int Rand = Random.Range(0, 3);
+                _spawnManager.SpawnEnemyWithAsteroid(Rand);
+                 _uiManager.TurnOnAsteroidAnnouncment(Rand);
+            }
         }
 
         if(other.tag == "Player")

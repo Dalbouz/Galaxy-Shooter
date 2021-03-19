@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _speed = 4.0f;
 
+    
+
     private float _yPosition=6.5f;
     private float _xPosition;
 
@@ -15,6 +17,7 @@ public class Enemy : MonoBehaviour
     private player _player;
     private Animator _animator; // Kreiranje kontrolera za Animator komponentu
     private AudioSource _audioSource;
+    
     
     
     void Start()
@@ -28,6 +31,7 @@ public class Enemy : MonoBehaviour
         _audioSource = gameObject.GetComponent<AudioSource>();
         if (_audioSource == null)
             Debug.LogError("Audio Source je jednak null.");
+        
     }
 
     // Update is called once per frame
@@ -36,6 +40,7 @@ public class Enemy : MonoBehaviour
         //Pomicanje preda dolje 4 m po sekundi
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
         RespawnWhenOnEnd();
+        
         
     }
 
@@ -58,7 +63,7 @@ public class Enemy : MonoBehaviour
             //provjeravamo da li ova skripta postoji na našem "other" objektu, ako da izvrši je 
             if (_player != null)
                 _player.Damage();
-            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            gameObject.GetComponent<BoxCollider2D>().enabled = false; // iskljucujemo njegov box collider tako da se player nemoze zaletit u exploziju
             _animator.SetTrigger("IsDestroy");
             _audioSource.Play();
             _speed = 0;
@@ -83,6 +88,8 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject, 2f);// ovih 4.8f je wait time, prvo cekamo određeno vrijeme i onda unistimo objekt
             if(_player!=null)
                 _player.AddScore(Random.Range(5,50)); // tu pozivamo Addscore metodu i vraca vrijednost random izeđu 5 i 50, i spremat ce se kao varijabla points unutar Player scripte
+            
+            
         }
         
     }
@@ -100,4 +107,6 @@ public class Enemy : MonoBehaviour
 
     }
     
+    
+   
 }
