@@ -8,6 +8,8 @@ public class EngineHealth : MonoBehaviour
     [SerializeField]
     private Slider _slider;
 
+    //FEEDBACK: koristiti tip Image _engineDamageImage
+    //          na taj nacin ne moras kasnije dohvacati komponentu image i osiguras da je tip koji ocekujes referenciran
     [SerializeField]
     private GameObject _engineDamageImage;
 

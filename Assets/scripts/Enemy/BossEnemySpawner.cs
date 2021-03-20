@@ -17,6 +17,7 @@ public class BossEnemySpawner : MonoBehaviour
    
     void Start()
     {
+        //FEEDBACK: izbjegavati Find metode, koristiti reference
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         if (_spawnManager == null)
             Debug.LogError("_spawnManager je jednak NULL.");

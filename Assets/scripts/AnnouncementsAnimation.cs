@@ -26,6 +26,8 @@ public void ScaleAnim()
     IEnumerator Scale()
     {
         float timer = 0;
+        //FEEDBACK: izbjegavati while true petlje, uvijek moraju imat neki uvjet za izlazak
+        //          ovako postoji mogucnost da zauvijek zavrsi u beskonacnoj petlji i nesto se zamrzne
         while (true)
         {
             while(_maxScale > transform.localScale.x)

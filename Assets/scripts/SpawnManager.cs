@@ -63,6 +63,8 @@ public class SpawnManager : MonoBehaviour
     {
         
 
+        //FEEDBACK: _stopSpawn == false se moze napisati i kao !_stopSpawn za uvijet
+        //          pripaziti na imenovanje i koristenje varijabli, stopSpawn kada je true bi imalo nekako smisla da se prekine a ne kada je false
             while (_stopSpawn == false) // ako je while(true) to je neogranicena petlja, ako imamo ovako uvjet, onda ga mozemo mijenjat i zaustaviti petlju, tj. spawnanje objekta
             {
                 int RandomNumbersOfEnemys = Random.Range(0, 5);//vraca broj izmedu 0 i 10(0,1,2,3,4...6)

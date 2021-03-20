@@ -6,7 +6,8 @@ public class Boss1 : MonoBehaviour
 {
     [SerializeField]
     private int _health = 70;
-    
+
+    //FEEDBACK: brisati nepotrebne komentare i prazne metode u kodu
     // Start is called before the first frame update
     void Start()
     {

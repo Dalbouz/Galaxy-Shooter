@@ -57,6 +57,8 @@ public class Boss1Movement : MonoBehaviour
             switch (RandCannon)
             {
                 case 0:
+                    //FEEDBACK: kako se ovo cekanje izvrsava u svakom slucaju prebaciti to van switch naredbe
+                    //          ili odvojiti ovu logiku u metodu, kako se ponavlja kod samo s drugim prefabovima
                     yield return new WaitForSeconds(RandomTimeWaitCannon);
                     _leftLeftCannonPrefab = Instantiate(_leftLeftCannon, PosToSpawnLeftLeft, Quaternion.identity);
                     _rightLeftCannonPrefab = Instantiate(_rightLeftCannon, PosToSpawnRightLeft, Quaternion.identity);

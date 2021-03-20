@@ -19,6 +19,7 @@ public class Boss1CannonScale : MonoBehaviour
    
     void Update()
     {
+        //FEEDBACK: izbjegavati magic numbers, hardkodirane vrijednosti
         if (_leftBossLeftCannon != null)
         {
             if (transform.localScale.y < 13)
